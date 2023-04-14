@@ -23,10 +23,10 @@ return new class extends Migration
             $table->string('member_blood');
             $table->string('member_horoskop');
             $table->string('member_height');
-            $table->string('member_instagram');
-            $table->string('member_twitter');
-            $table->string('member_tiktok');
-            $table->string('member_showroom');
+            $table->string('member_instagram')->nullable();
+            $table->string('member_twitter')->nullable();
+            $table->string('member_tiktok')->nullable();
+            $table->string('member_showroom')->nullable();
             $table->string('member_picture')->nullable();
             $table->softDeletes();
             $table->timestamps();
