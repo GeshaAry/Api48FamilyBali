@@ -16,6 +16,7 @@ class Memberjkt48 extends Model
         'member_name',
         'member_jiko',
         'member_show',
+        'member_gen',
         'member_status',
         'member_birthdate',
         'member_blood',

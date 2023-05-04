@@ -6,17 +6,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
-class Article extends Model
+class Merchandise extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'article_id';
+    protected $primaryKey = 'merchandise_id';
     protected $fillable = [
-        'article_id',
-        'admin_id',
-        'article_thumbnail',
-        'article_description',
-        'article_title'
+        'merchandise_id',
+        'merchandisectg_id',
+        'merchandise_name',
+        'merchandise_picture',
+        'merchandise_description',
+        'merchandise_nameaccount',
+        'merchandise_accountnumber',
+        'merchandise_bankname',
     ];
 
     public function getCreatedAtAttribute(){
@@ -31,7 +34,7 @@ class Article extends Model
         }
     }
 
-    public function Admin(){
-        return $this->belongsTo(Admin::class, 'admin_id', 'admin_id');
+    public function MerchandiseCategory(){
+        return $this->belongsTo(MerchandiseCategory::class, 'merchandisectg_id', 'merchandisectg_id');
     }
 }

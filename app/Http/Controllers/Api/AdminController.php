@@ -61,7 +61,7 @@ class AdminController extends Controller
 
         $admin = Admin::create([
             'admin_username' => $request->admin_username,
-            'admin_password' => $request->admin_password
+            'admin_password' => bcrypt($request->admin_password)
         ]);
 
         return response([

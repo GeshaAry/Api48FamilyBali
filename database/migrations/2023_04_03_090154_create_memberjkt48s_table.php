@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('member_name');
             $table->string('member_jiko');
             $table->integer('member_show');
-            $table->integer('member_status');
+            $table->integer('member_gen');
+            $table->string('member_status');
             $table->string('member_birthdate');
             $table->string('member_blood');
             $table->string('member_horoskop');

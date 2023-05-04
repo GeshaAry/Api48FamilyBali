@@ -6,17 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
-class Article extends Model
+class MerchandiseCategory extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'article_id';
+    protected $primaryKey = 'merchandisectg_id';
     protected $fillable = [
-        'article_id',
-        'admin_id',
-        'article_thumbnail',
-        'article_description',
-        'article_title'
+        'merchandisectg_id',
+        'merchandisectg_name'
     ];
 
     public function getCreatedAtAttribute(){
@@ -29,9 +26,5 @@ class Article extends Model
         if(!is_null($this->attributes['updated_at'])){
             return Carbon::parse($this->attributes['updated_at'])->format('Y-m-d H:i:s');
         }
-    }
-
-    public function Admin(){
-        return $this->belongsTo(Admin::class, 'admin_id', 'admin_id');
     }
 }

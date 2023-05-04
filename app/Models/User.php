@@ -2,43 +2,41 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
-class User extends Authenticatable
+class User extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    protected $primaryKey = 'user_id';
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'user_id',
+        'member_id',
+        'user_email',
+        'user_password',
+        'user_name',
+        'user_gender',
+        'user_birthdate',
+        'user_telephone',
+        'user_picture'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    public function getCreatedAtAttribute(){
+        if(!is_null($this->attributes['created_at'])){
+            return Carbon::parse($this->attributes['created_at'])->format('Y-m-d H:i:s');
+        }
+    }
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    public function getUpdatedAtAttribute(){
+        if(!is_null($this->attributes['updated_at'])){
+            return Carbon::parse($this->attributes['updated_at'])->format('Y-m-d H:i:s');
+        }
+    }
+
+    public function Member()
+    {
+        return $this->hasMany(Memberjkt48::class, 'user_id', 'member_id');
+    }
 }

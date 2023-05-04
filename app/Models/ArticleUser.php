@@ -15,7 +15,8 @@ class ArticleUser extends Model
         'articleuser_id',
         'user_id',
         'articleuser_thumbnail',
-        'articleuser_description'
+        'articleuser_description',
+        'articleuser_title'
     ];
 
     public function getCreatedAtAttribute(){
