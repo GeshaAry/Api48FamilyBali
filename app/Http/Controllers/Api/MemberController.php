@@ -11,10 +11,28 @@ use Illuminate\Support\Facades\DB;
 
 class MemberController extends Controller
 {
+
+    //mereturnkan semua data yang ada pada member
+    public function AllMember(){
+        $member = Memberjkt48::all();
+
+        if(count($member) > 0){
+            return response([
+                'message' => 'Retrieve All Member Success',
+                'data' => $member
+            ], 200);
+        }
+
+        return response([
+            'message' => 'Empty',
+            'data' => null
+        ], 400);
+    }
     
     //mereturnkan semua data yang ada pada member
-    public function index(){
-        $member = Memberjkt48::all();
+    public function index(Request $request){
+        $limit = $request->query('limit') ?? 100;
+        $member = Memberjkt48::paginate($limit);
 
         if(count($member) > 0){
             return response([

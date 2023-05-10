@@ -11,9 +11,28 @@ use Illuminate\Support\Facades\DB;
 
 class ActivityController extends Controller
 {
-    //mereturnkan semua data yang ada pada activity
-    public function index(){
+
+      //mereturnkan semua data yang ada pada activity
+      public function AllActivity(){
         $activity = Activityjkt48::all();
+
+        if(count($activity) > 0){
+            return response([
+                'message' => 'Retrieve All Activity Success',
+                'data' => $activity
+            ], 200);
+        }
+
+        return response([
+            'message' => 'Empty',
+            'data' => null
+        ], 400);
+    }
+
+    //mereturnkan semua data yang ada pada activity
+    public function index(Request $request){
+        $limit = $request->query('limit') ?? 100;
+        $activity = Activityjkt48::paginate($limit);
 
         if(count($activity) > 0){
             return response([
@@ -60,15 +79,18 @@ class ActivityController extends Controller
             return response(['message' => $validate->errors()], 400); //Return error invalid input
         }
 
-        if(!empty($request->activity_thumbnail)){
+        
+
+        if(isset($request->activity_thumbnail)){
             $uploadPictureActivity = $request->activity_thumbnail->store('img_activity', ['disk' => 'public']);
         }
         else{
             $uploadPictureActivity = NULL;
         }
+       
         $activity = Activityjkt48::create([
             'activity_date' => $request->activity_date,
-            'article_thumbnail' => $uploadPictureActivity,
+            'activity_thumbnail' => $uploadPictureActivity,
             'activity_title' => $request->activity_title,
             'activty_description' => $request->activty_description,
         ]);

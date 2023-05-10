@@ -30,4 +30,8 @@ class Activityjkt48 extends Model
             return Carbon::parse($this->attributes['updated_at'])->format('Y-m-d H:i:s');
         }
     }
+
+    public function Member(){
+        return $this->belongsToMany(Memberjkt48::class, 'detail_activities', 'activity_id', 'member_id');
+    }
 }
