@@ -35,5 +35,8 @@ class Article extends Model
         return $this->belongsTo(Admin::class, 'admin_id', 'admin_id');
     }
 
+    public function ArticlePictures(){
+        return $this->hasMany(ArticlePicture::class, 'article_id', 'article_id'); 
+    }
   
 }

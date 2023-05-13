@@ -29,7 +29,5 @@ class ArticlePicture extends Model
         }
     }
 
-    public function ArticlePictures(){
-        return $this->hasMany(Article::class, 'article_id', 'article_id'); 
-    }
+   
 }

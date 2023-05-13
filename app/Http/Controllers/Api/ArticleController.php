@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Article;
+use App\Models\ArticlePicture;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ArticleController extends Controller
 {
@@ -31,7 +33,7 @@ class ArticleController extends Controller
     
     //mereturnkan data yang dipilih pada article
     public function show($article_id){
-        $article = Article::where('article_id', $article_id)->first();
+        $article = Article::with(['Admin','ArticlePictures'])->where('article_id', $article_id)->first();
 
         if(!is_null($article)){
             return response([
@@ -72,6 +74,20 @@ class ArticleController extends Controller
             'article_description' => $request->article_description,
             'article_title' => $request->article_title
         ]);
+
+        $articlephotos = $request->article_pictures;
+
+        foreach($articlephotos as $articlephoto){
+
+            $uploadPictureArticles = $articlephoto->store('img_articles', ['disk' => 'public']);
+
+            $photos = ArticlePicture::create([
+                'article_id' => $article->article_id,
+                'article_picture' => $uploadPictureArticles,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(), 
+            ]);
+        }
 
         return response([
             'message' => 'Add Article Success',
