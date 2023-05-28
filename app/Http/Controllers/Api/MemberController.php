@@ -28,6 +28,28 @@ class MemberController extends Controller
             'data' => null
         ], 400);
     }
+
+    //mereturnkan semua data member yang berulang tahun
+    public function BirthdayMember(){
+        // $members = Memberjkt48::all();
+
+        $month = date("m");
+        $members = Memberjkt48::whereMonth("member_birthdate", $month)->get();
+
+        return $members;
+  
+        if(count($members) > 0){
+            return response([
+                'message' => 'Member Birthday',
+                'data' => $members
+            ], 200);
+        }
+
+        return response([
+            'message' => 'Empty',
+            'data' => null
+        ], 400);
+    }
     
     //mereturnkan semua data yang ada pada member
     public function index(Request $request){

@@ -14,8 +14,9 @@ use Carbon\Carbon;
 class ArticleController extends Controller
 {
     //mereturnkan semua data yang ada pada article
-    public function index(){
-        $article = Article::with(['Admin'])->get();
+    public function index(Request $request){
+        $limit = $request->query('limit') ?? 100;
+        $article = Article::with(['Admin'])->paginate($limit);
 
         if(count($article) > 0){
             return response([

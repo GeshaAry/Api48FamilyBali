@@ -20,7 +20,10 @@ class User extends Model
         'user_gender',
         'user_birthdate',
         'user_telephone',
-        'user_picture'
+        'user_picture',
+        'email_verified_at',
+        'token',
+        'token_reset_password'
     ];
 
     public function getCreatedAtAttribute(){
@@ -35,8 +38,7 @@ class User extends Model
         }
     }
 
-    public function Member()
-    {
-        return $this->hasMany(Memberjkt48::class, 'user_id', 'member_id');
+    public function Member(){
+        return $this->belongsTo(Memberjkt48::class, 'member_id', 'member_id');
     }
 }

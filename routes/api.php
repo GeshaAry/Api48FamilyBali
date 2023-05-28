@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\MerchandiseCategoryController;
 use App\Http\Controllers\Api\MerchandiseController;
 use App\Http\Controllers\Api\DetailActivityController;
+use App\Http\Controllers\Api\ArticlePictureController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,11 +35,16 @@ Route::post('admin/{admin_id}', [AdminController::class, 'update']);
 
 Route::resource('member', MemberController::class);
 Route::get('allmember', 'App\Http\Controllers\Api\MemberController@AllMember');
+Route::get('birthdaymember', 'App\Http\Controllers\Api\MemberController@BirthdayMember');
 Route::post('member/{member_id}', [MemberController::class, 'update']);
 Route::get('showmember/{member_id}', 'App\Http\Controllers\Api\MemberController@show');
 
+
 Route::resource('user', UserController::class);
 Route::post('user/{user_id}', [UserController::class, 'update']);
+Route::post('pictureuser/{user_id}', [UserController::class, 'updateProfilePictureUser']);
+Route::post('memberuser/{user_id}', [UserController::class, 'updateMemberUser']);
+Route::post('changepassword/{user_id}', 'App\Http\Controllers\Api\UserController@updatePassword');
 
 Route::resource('article', ArticleController::class);
 Route::post('article/{article_id}', [ArticleController::class, 'update']);
@@ -62,8 +68,17 @@ Route::resource('merchandise', MerchandiseController::class);
 Route::post('merchandise/{merchandise_id}', [MerchandiseController::class, 'update']);
 
 Route::post('loginadmin','App\\Http\\Controllers\\Api\LoginAdminController@login');
+Route::post('login','App\\Http\\Controllers\\Api\UserController@login');
 
 Route::resource('detailactivity', DetailActivityController::class);
 Route::get('detailactivity', 'App\Http\Controllers\Api\DetailActivityController@AllDetailActivity');
 Route::post('detailactivity/{detailactivity_id}', [DetailActivityController::class, 'update']);
 Route::get('detailactivityjkt48/{activity_id}', 'App\Http\Controllers\Api\DetailActivityController@ShowDetailActivity');
+
+Route::resource('articlepictures', ArticlePictureController::class);
+
+Route::get('verifyemail/{token}', [UserController::class, 'emailVerify'])->name('verifyemailuser');
+
+Route::get('checktoken/{email}/{token_reset_password}', [UserController::class, 'checkTokenResetPassword']);
+Route::post('resetpassword/{email}/{token_reset_password}', [UserController::class, 'resetPassword']);
+Route::post('sendforgotpassword', [UserController::class, 'forgotPassword']);
