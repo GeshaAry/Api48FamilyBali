@@ -14,6 +14,8 @@ use App\Http\Controllers\Api\MerchandiseCategoryController;
 use App\Http\Controllers\Api\MerchandiseController;
 use App\Http\Controllers\Api\DetailActivityController;
 use App\Http\Controllers\Api\ArticlePictureController;
+use App\Http\Controllers\Api\EventController;
+use App\Http\Controllers\Api\TransactionEventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -82,3 +84,11 @@ Route::get('verifyemail/{token}', [UserController::class, 'emailVerify'])->name(
 Route::get('checktoken/{email}/{token_reset_password}', [UserController::class, 'checkTokenResetPassword']);
 Route::post('resetpassword/{email}/{token_reset_password}', [UserController::class, 'resetPassword']);
 Route::post('sendforgotpassword', [UserController::class, 'forgotPassword']);
+
+Route::resource('event', EventController::class);
+Route::post('event/{event_id}', [EventController::class, 'update']);
+
+Route::post('transactionevent', 'App\Http\Controllers\Api\TransactionEventController@store');
+Route::get('transactionevent/user/{user_id}', 'App\Http\Controllers\Api\TransactionEventController@show');
+Route::delete('transactionevent/{transactionevent_id}', 'App\Http\Controllers\Api\TransactionEventController@destroy');
+Route::post('uploadproofpayment/{transactionevent_id}', 'App\Http\Controllers\Api\TransactionEventController@updateProofPayment');

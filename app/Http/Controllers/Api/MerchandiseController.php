@@ -31,7 +31,7 @@ class MerchandiseController extends Controller
     
     //mereturnkan data yang dipilih pada merchandise
     public function show($merchandise_id){
-        $merchandise = Merchandise::where('merchandise_id', $merchandise_id)->first();
+        $merchandise = Merchandise::with(['MerchandiseCategory'])->where('merchandise_id', $merchandise_id)->first();
 
         if(!is_null($merchandise)){
             return response([

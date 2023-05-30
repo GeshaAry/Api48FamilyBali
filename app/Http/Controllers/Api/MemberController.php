@@ -222,7 +222,6 @@ class MemberController extends Controller
             $member->member_picture = $uploadPictureMember;
         }
 
-       
 
         if($member->save()){
             return response([
