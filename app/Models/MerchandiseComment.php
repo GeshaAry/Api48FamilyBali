@@ -6,16 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
-class MerchandiseVariant extends Model
+class MerchandiseComment extends Model
 {
     use HasFactory;
-    protected $primaryKey = 'merchandisevar_id';
+    protected $primaryKey = 'merchandisecmt_id';
     protected $fillable = [
-        'merchandisevar_id',
+        'merchandisecmt_id',
         'merchandise_id',
-        'merchandisevar_size',
-        'merchandisevar_price',
-        'merchandisevar_stock'
+        'user_id',
+        'merchandise_comment',
     ];
 
     public function getCreatedAtAttribute(){
@@ -30,12 +29,11 @@ class MerchandiseVariant extends Model
         }
     }
 
-    public static function filters(){
-        $instance = new static();
-        return $instance->getConnection()->getSchemaBuilder()->getColumnListing($instance->getTable());
-    }
-
     public function Merchandise(){
         return $this->belongsTo(Merchandise::class, 'merchandise_id', 'merchandise_id');
+    }
+
+    public function User(){
+        return $this->belongsTo(User::class, 'user_id', 'user_id');
     }
 }

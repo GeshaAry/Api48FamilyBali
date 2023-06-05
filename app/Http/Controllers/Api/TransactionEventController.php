@@ -11,6 +11,7 @@ use App\Models\Admin;
 use App\Models\User;
 use App\Models\TransactionEvent;
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 class TransactionEventController extends Controller
 {
@@ -140,7 +141,7 @@ class TransactionEventController extends Controller
         $updateData = $request->all();
 
         $validate = Validator::make($updateData, [
-            'transactionevent_proofpayment' =>  'nullable|max:1024|mimes:jpg,png,jpeg|image',
+            'transactionevent_proofpayment' =>  'required|max:1024|mimes:jpg,png,jpeg|image',
         ]);
         
         if($validate->fails()){
@@ -164,5 +165,81 @@ class TransactionEventController extends Controller
             'message' => 'Update Proof Payment Failed',
             'data' => null
         ], 400);
+    }
+
+    //update status pada transaction event
+    public function updateStatusTransactionEvent(Request $request, $transactionevent_id){
+        $transactionevent = TransactionEvent::where('transactionevent_id', $transactionevent_id)->first();
+
+        if(is_null($transactionevent)){
+            return response([
+                'message' => 'Transaction Event Not Found',
+                'data' => null
+            ], 404);
+        }
+
+        $updateData = $request->all();
+
+        $validate = Validator::make($updateData, [
+            'admin_id' =>  'nullable',
+            'transactionevent_status' =>  'nullable',
+        ]);
+        
+        if($validate->fails()){
+            return response(['message' => $validate->errors()], 400);
+        }
+
+        $transactionevent->admin_id = $updateData['admin_id'];
+        $transactionevent->transactionevent_status = $updateData['transactionevent_status'];
+
+        if($transactionevent->save()){
+            return response([
+                'message' => 'Update Status Success',
+                'data' => $transactionevent
+            ], 200);
+        }
+
+        return response([
+            'message' => 'Update Status Failed',
+            'data' => null
+        ], 400);
+    }
+
+    public function downloadEvent($transactionevent_id){
+        $transactionevent = TransactionEvent::with(['User','Admin','Event'])->where('transactionevent_id', $transactionevent_id)->first();
+
+        $data = [
+            'title' => 'E-TICKET EVENT',
+            'transaction' => $transactionevent,
+        ];
+          
+        $pdf = PDF::loadView('invoiceevent', $data)->setPaper('a4', 'landscape');
+    
+        return $pdf->stream('Invoice E-Ticket.pdf');
+    }
+
+    public function reportEvent(Request $request){
+
+        $start_date = $request->start_date;
+        $end_date = $request->end_date;
+
+        $transactionevent =  TransactionEvent::with(['User','Admin','Event'])->whereDate('transactionevent_datebuy','>=',$start_date)->whereDate('transactionevent_datebuy','<=',$end_date)->where('transactionevent_status','Transaction Success')->get();
+        $total =  TransactionEvent::with(['User','Admin','Event'])->whereDate('transactionevent_datebuy','>=',$start_date)->whereDate('transactionevent_datebuy','<=',$end_date)->where('transactionevent_status','Transaction Success')->sum('transactionevent_totalprice');
+        
+        $data = [
+            'title' => 'Report E-Ticket Event',
+            'reports' => $transactionevent,
+            'total' => $total,
+        ];
+          
+        $pdf = PDF::loadView('reportevent', $data)->setPaper('a4');
+    
+        return $pdf->stream('Report E-Ticket.pdf');
+
+    }
+
+    public static function RupiahFormat($total_price){
+        $result = number_format($total_price,0,'','.');
+        return $result;
     }
 }

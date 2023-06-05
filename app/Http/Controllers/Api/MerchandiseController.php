@@ -7,13 +7,16 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Merchandise;
+use App\Models\MerchandiseVariant;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class MerchandiseController extends Controller
 {
     //mereturnkan semua data yang ada pada merchandise
-    public function index(){
-        $merchandise =  Merchandise::with(['MerchandiseCategory'])->get();
+    public function index(Request $request){
+        $limit = $request->query('limit') ?? 100;
+        $merchandise =  Merchandise::with(['MerchandiseCategory','MerchandiseVariant'])->paginate($limit);;
 
         if(count($merchandise) > 0){
             return response([
@@ -31,7 +34,7 @@ class MerchandiseController extends Controller
     
     //mereturnkan data yang dipilih pada merchandise
     public function show($merchandise_id){
-        $merchandise = Merchandise::with(['MerchandiseCategory'])->where('merchandise_id', $merchandise_id)->first();
+        $merchandise = Merchandise::with(['MerchandiseCategory','MerchandiseVariant'])->where('merchandise_id', $merchandise_id)->first();
 
         if(!is_null($merchandise)){
             return response([
@@ -46,7 +49,7 @@ class MerchandiseController extends Controller
         ], 400);
     }
 
-    //menambah data pada Article
+    //menambah data pada merchandise
     public function store(Request $request){
         $storeData = $request->all();
         $validate = Validator::make($storeData, [
@@ -69,6 +72,7 @@ class MerchandiseController extends Controller
         else{
             $uploadPictureMerchandise = NULL;
         }
+        
         $merchandise = Merchandise::create([
             'merchandisectg_id' => $request->merchandisectg_id,
             'merchandise_name' => $request->merchandise_name,
@@ -78,6 +82,27 @@ class MerchandiseController extends Controller
             'merchandise_accountnumber' => $request->merchandise_accountnumber,
             'merchandise_bankname' => $request->merchandise_bankname,
         ]);
+        
+        $merchandisevariants = $request->merchandise_variant;
+
+        foreach($merchandisevariants as $variant){
+            $merchandisevariant = json_decode($variant, true);
+            $merchandisevar = MerchandiseVariant::create([
+                'merchandise_id' => $merchandise->merchandise_id,
+                'merchandisevar_size' => $merchandisevariant['merchandisevar_size'],
+                'merchandisevar_price' => $merchandisevariant['merchandisevar_price'],
+                'merchandisevar_stock' => $merchandisevariant['merchandisevar_stock'],
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(), 
+            ]);
+        }
+
+
+        // $merchandisevariants = collect($request->merchandise_variant)->map(function($variant) {
+        //     return collect($variant)->only(MerchandiseVariant::filters())->all();
+        // });
+        
+        // $merchandise->MerchandiseVariant()->createMany($merchandisevariants);
 
         return response([
             'message' => 'Add Merchandise Success',
@@ -86,7 +111,7 @@ class MerchandiseController extends Controller
     }
 
 
-    //menghapus data pada article
+    //menghapus data pada merchandise
     public function destroy($merchandise_id){
         $merchandise = Merchandise::where('merchandise_id', $merchandise_id);
 
@@ -149,8 +174,22 @@ class MerchandiseController extends Controller
         $merchandise->merchandise_accountnumber = $updateData['merchandise_accountnumber'];
         $merchandise->merchandise_bankname = $updateData['merchandise_bankname'];
 
+        $merchandise->MerchandiseVariant()->delete();
 
-    
+        $merchandisevariants = $request->merchandise_variant;
+
+        foreach($merchandisevariants as $variant){
+            $merchandisevariant = json_decode($variant, true);
+            $merchandisevar = MerchandiseVariant::create([
+                'merchandise_id' => $merchandise->merchandise_id,
+                'merchandisevar_size' => $merchandisevariant['merchandisevar_size'],
+                'merchandisevar_price' => $merchandisevariant['merchandisevar_price'],
+                'merchandisevar_stock' => $merchandisevariant['merchandisevar_stock'],
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(), 
+            ]);
+        }
+        
         if($merchandise->save()){
             return response([
                 'message' => 'Update Merchandise Success',

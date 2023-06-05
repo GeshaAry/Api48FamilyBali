@@ -36,4 +36,8 @@ class Event extends Model
             return Carbon::parse($this->attributes['updated_at'])->format('Y-m-d H:i:s');
         }
     }
+
+    public function EventComment(){
+        return $this->hasMany(EventComment::class, 'eventcomment_id', 'event_id');
+    }
 }

@@ -16,6 +16,11 @@ use App\Http\Controllers\Api\DetailActivityController;
 use App\Http\Controllers\Api\ArticlePictureController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\TransactionEventController;
+use App\Http\Controllers\Api\EventCommentController;
+use App\Http\Controllers\Api\TransactionMerchandiseController;
+use App\Http\Controllers\Api\MerchandiseCommentController;
+use App\Http\Controllers\Api\ArticleCommentController;
+use App\Http\Controllers\Api\ArticleUserCommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +58,9 @@ Route::post('article/{article_id}', [ArticleController::class, 'update']);
 
 Route::resource('articleuser', ArticleUserController::class);
 Route::post('articleuser/{articleuser_id}', [ArticleUserController::class, 'update']);
+Route::get('showarticleuser/{articleuser_id}', 'App\Http\Controllers\Api\ArticleUserController@showDetailArticle');
+Route::get('articleuserpage', 'App\Http\Controllers\Api\ArticleUserController@showArticleUser');
+Route::post('updatestatusarticle/{articleuser_id}', 'App\Http\Controllers\Api\ArticleUserController@updateStatus');
 
 Route::resource('gallery', GalleryController::class);
 
@@ -90,5 +98,46 @@ Route::post('event/{event_id}', [EventController::class, 'update']);
 
 Route::post('transactionevent', 'App\Http\Controllers\Api\TransactionEventController@store');
 Route::get('transactionevent/user/{user_id}', 'App\Http\Controllers\Api\TransactionEventController@show');
+Route::get('transactionevent', 'App\Http\Controllers\Api\TransactionEventController@index');
 Route::delete('transactionevent/{transactionevent_id}', 'App\Http\Controllers\Api\TransactionEventController@destroy');
 Route::post('uploadproofpayment/{transactionevent_id}', 'App\Http\Controllers\Api\TransactionEventController@updateProofPayment');
+Route::post('updatestatusevent/{transactionevent_id}', 'App\Http\Controllers\Api\TransactionEventController@updateStatusTransactionEvent');
+Route::get('downloadinvoice/{transactionevent_id}', 'App\Http\Controllers\Api\TransactionEventController@downloadEvent');
+Route::get('reportevent', 'App\Http\Controllers\Api\TransactionEventController@reportEvent');
+
+Route::get('event/{event_id}/comment', 'App\Http\Controllers\Api\EventCommentController@index');
+Route::post('event/{event_id}/comment', 'App\Http\Controllers\Api\EventCommentController@store');
+Route::put('event/{event_id}/comment/{eventcomment_id}', 'App\Http\Controllers\Api\EventCommentController@update');
+Route::delete('event/{event_id}/comment/{eventcomment_id}', 'App\Http\Controllers\Api\EventCommentController@destroy');
+Route::get('eventcomment', 'App\Http\Controllers\Api\DiskusiController@getEventComment');
+
+Route::post('transactionmerchandise', 'App\Http\Controllers\Api\TransactionMerchandiseController@store');
+Route::get('transactionmerchandise/user/{user_id}', 'App\Http\Controllers\Api\TransactionMerchandiseController@show');
+Route::get('transactionmerchandise', 'App\Http\Controllers\Api\TransactionMerchandiseController@index');
+Route::delete('transactionmerchandise/{merchandisetns_id}', 'App\Http\Controllers\Api\TransactionMerchandiseController@destroy');
+Route::post('uploadproofpaymentmerchandise/{merchandisetns_id}', 'App\Http\Controllers\Api\TransactionMerchandiseController@updateProofPayment');
+Route::post('updatestatusmerchandise/{merchandisetns_id}', 'App\Http\Controllers\Api\TransactionMerchandiseController@updateStatusTransactionMerchandise');
+Route::get('downloadinvoicemerchandise/{merchandisetns_id}', 'App\Http\Controllers\Api\TransactionMerchandiseController@downloadMerchandise');
+Route::get('reportmerchandise', 'App\Http\Controllers\Api\TransactionMerchandiseController@reportMerchandise');
+
+
+Route::get('merchandise/{merchandise_id}/comment', 'App\Http\Controllers\Api\MerchandiseCommentController@index');
+Route::post('merchandise/{merchandise_id}/comment', 'App\Http\Controllers\Api\MerchandiseCommentController@store');
+Route::put('merchandise/{merchandise_id}/comment/{eventcomment_id}', 'App\Http\Controllers\Api\MerchandiseCommentController@update');
+Route::delete('merchandise/{merchandise_id}/comment/{eventcomment_id}', 'App\Http\Controllers\Api\MerchandiseCommentController@destroy');
+Route::get('merchandisecomment', 'App\Http\Controllers\Api\MerchandiseCommentController@getMerchandiseComment');
+
+Route::get('article/{article_id}/comment', 'App\Http\Controllers\Api\ArticleCommentController@index');
+Route::post('article/{article_id}/comment', 'App\Http\Controllers\Api\ArticleCommentController@store');
+Route::put('article/{article_id}/comment/{articlecomment_id}', 'App\Http\Controllers\Api\ArticleCommentController@update');
+Route::delete('article/{article_id}/comment/{articlecomment_id}', 'App\Http\Controllers\Api\ArticleCommentController@destroy');
+Route::get('articlecomment', 'App\Http\Controllers\Api\MerchandiseCommentController@getArticleComment');
+
+Route::get('articleuser/{articleuser_id}/comment', 'App\Http\Controllers\Api\ArticleUserCommentController@index');
+Route::post('articleuser/{articleuser_id}/comment', 'App\Http\Controllers\Api\ArticleUserCommentController@store');
+Route::put('articleuser/{articleuser_id}/comment/{articleusercomment_id}', 'App\Http\Controllers\Api\ArticleUserCommentController@update');
+Route::delete('articleuser/{articleuser_id}/comment/{articleusercomment_id}', 'App\Http\Controllers\Api\ArticleUserCommentController@destroy');
+Route::get('articleusercomment', 'App\Http\Controllers\Api\ArticleUserCommentController@getArticleUserComment');
+
+
+

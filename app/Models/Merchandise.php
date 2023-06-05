@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
@@ -37,4 +38,10 @@ class Merchandise extends Model
     public function MerchandiseCategory(){
         return $this->belongsTo(MerchandiseCategory::class, 'merchandisectg_id', 'merchandisectg_id');
     }
+
+    public function MerchandiseVariant(){
+        return $this->hasMany(MerchandiseVariant::class, 'merchandise_id', 'merchandise_id');
+    }
+    
+
 }
