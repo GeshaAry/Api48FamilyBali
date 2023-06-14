@@ -16,7 +16,7 @@ class ArticleController extends Controller
     //mereturnkan semua data yang ada pada article
     public function index(Request $request){
         $limit = $request->query('limit') ?? 100;
-        $article = Article::with(['Admin'])->paginate($limit);
+        $article = Article::with(['Admin', 'ArticlePictures'])->paginate($limit);
 
         if(count($article) > 0){
             return response([
@@ -69,6 +69,7 @@ class ArticleController extends Controller
         else{
             $uploadPictureArticle = NULL;
         }
+
         $article = Article::create([
             'admin_id' => $request->admin_id,
             'article_thumbnail' => $uploadPictureArticle,
@@ -76,18 +77,20 @@ class ArticleController extends Controller
             'article_title' => $request->article_title
         ]);
 
-        $articlephotos = $request->article_pictures;
+        if(!empty($request->article_pictures)){
+            $articlephotos = $request->article_pictures;
 
-        foreach($articlephotos as $articlephoto){
+            foreach($articlephotos as $articlephoto){
 
-            $uploadPictureArticles = $articlephoto->store('img_articles', ['disk' => 'public']);
+                $uploadPictureArticles = $articlephoto->store('img_articles', ['disk' => 'public']);
 
-            $photos = ArticlePicture::create([
-                'article_id' => $article->article_id,
-                'article_picture' => $uploadPictureArticles,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(), 
-            ]);
+                $photos = ArticlePicture::create([
+                    'article_id' => $article->article_id,
+                    'article_picture' => $uploadPictureArticles,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(), 
+                ]);
+            }
         }
 
         return response([
@@ -146,6 +149,7 @@ class ArticleController extends Controller
             return response(['message' => $validate->errors()], 400);
         }
 
+        
         $article->admin_id = $updateData['admin_id'];
         if(isset($request->article_thumbnail)){
             $uploadPictureArticle = $request->article_thumbnail->store('img_article', ['disk' => 'public']);
@@ -153,6 +157,23 @@ class ArticleController extends Controller
         }
         $article->article_description = $updateData['article_description'];
         $article->article_title = $updateData['article_title'];
+
+
+        if(!empty($request->article_pictures)){
+            $articlephotos = $request->article_pictures;
+
+            foreach($articlephotos as $articlephoto){
+
+                $uploadPictureArticles = $articlephoto->store('img_articles', ['disk' => 'public']);
+
+                $photos = ArticlePicture::create([
+                    'article_id' => $article->article_id,
+                    'article_picture' => $uploadPictureArticles,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(), 
+                ]);
+            }
+        }
     
         if($article->save()){
             return response([

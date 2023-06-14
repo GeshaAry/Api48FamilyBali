@@ -31,8 +31,6 @@ class MemberController extends Controller
 
     //mereturnkan semua data member yang berulang tahun
     public function BirthdayMember(){
-        // $members = Memberjkt48::all();
-
         $month = date("m");
         $members = Memberjkt48::whereMonth("member_birthdate", $month)->get();
 

@@ -330,13 +330,13 @@ class UserController extends Controller
 
         if($user->save()){
             return response([
-                'message' => 'Sending Password Success',
+                'message' => 'Sending Password Success, Please check ur email',
                 'data' => $user
             ]);
         }
 
         return response([
-            'message' => 'Sending Password Success',
+            'message' => 'Sending Password Success, Please check ur email',
             'data' => $user
         ]);
     }

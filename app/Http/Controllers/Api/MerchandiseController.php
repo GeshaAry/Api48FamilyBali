@@ -16,7 +16,7 @@ class MerchandiseController extends Controller
     //mereturnkan semua data yang ada pada merchandise
     public function index(Request $request){
         $limit = $request->query('limit') ?? 100;
-        $merchandise =  Merchandise::with(['MerchandiseCategory','MerchandiseVariant'])->paginate($limit);;
+        $merchandise =  Merchandise::with(['MerchandiseCategory','MerchandiseVariant'])->paginate($limit);
 
         if(count($merchandise) > 0){
             return response([
@@ -96,13 +96,6 @@ class MerchandiseController extends Controller
                 'updated_at' => Carbon::now(), 
             ]);
         }
-
-
-        // $merchandisevariants = collect($request->merchandise_variant)->map(function($variant) {
-        //     return collect($variant)->only(MerchandiseVariant::filters())->all();
-        // });
-        
-        // $merchandise->MerchandiseVariant()->createMany($merchandisevariants);
 
         return response([
             'message' => 'Add Merchandise Success',

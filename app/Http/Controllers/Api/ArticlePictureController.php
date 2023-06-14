@@ -27,4 +27,27 @@ class ArticlePictureController extends Controller
             'data' => null
         ], 400);
     }
+
+    public function destroy($articlepicture_id ){
+        $articlepictures = ArticlePicture::where('articlepicture_id', $articlepicture_id);
+
+        if(is_null($articlepictures)){
+            return response([
+                'message' => 'Article Picture Not Found',
+                'date' => null
+            ], 404);
+        }
+
+        if($articlepictures->delete()){
+            return response([
+                'message' => 'Delete Article Picture Success',
+                'data' => $articlepictures
+            ], 200);
+        }
+
+        return response([
+            'message' => 'Delete Article Picture Failed',
+            'data' => null,
+        ], 400);
+    }
 }

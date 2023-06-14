@@ -117,7 +117,7 @@ class VideoGalleryController extends Controller
         }
 
         $video->gallery_videopath = $updateData['gallery_videopath'];
-
+        
 
         if($video->save()){
             return response([

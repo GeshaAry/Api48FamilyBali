@@ -72,7 +72,7 @@ class TransactionEventController extends Controller
 
         if($request->transactionevent_quantity > $eventticket){
             return response([
-                'message' => 'Tiket Kurang',
+                'message' => 'You input a quantity that is more than the available stock',
             ], 400);
         }
         $event->update([

@@ -18,7 +18,7 @@ class GalleryController extends Controller
 
         if(count($gallery) > 0){
             return response([
-                'message' => 'Retrieve All Success',
+                'message' => 'Retrieve All Picture Success',
                 'data' => $gallery
             ], 200);
         }

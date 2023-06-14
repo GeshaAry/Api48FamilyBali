@@ -74,7 +74,7 @@ class TransactionMerchandiseController extends Controller
 
         if($request->merchandisetns_quantity > $merchandisestock){
             return response([
-                'message' => 'Stock Kurang',
+                'message' => 'You input a quantity that is more than the available stock',
             ], 400);
         }
 

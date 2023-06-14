@@ -35,8 +35,6 @@ class DetailActivityController extends Controller
 
     //mereturnkan data yang dicari pada detail activity
     public function ShowDetailActivity($activity_id){
-        // $detailactivity = DetailActivity::with(['Activity', 'Member'])->where('activity_id', $activity_id)->get();
-
         $detailactivity = Activityjkt48::with(['Member'])->where('activity_id', $activity_id)->first();
 
         if(!is_null($detailactivity)){
